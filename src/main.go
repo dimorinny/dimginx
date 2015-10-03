@@ -14,7 +14,6 @@ func init() {
 }
 
 func parseConfig() {
-
 	parser := config.JsonConfigParser{}
 	configuration, err := parser.Parse()
 
