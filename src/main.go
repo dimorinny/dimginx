@@ -2,7 +2,7 @@ package main
 
 import (
 	"config"
-	"http"
+	"fmt"
 	"io"
 	"log"
 	"logger"
@@ -42,15 +42,11 @@ func init() {
 }
 
 func main() {
+	logger.LogI(fmt.Sprintf("Server started on %s:%d", configuration.Host, configuration.Port))
+
 	for _, v := range closers {
 		defer v.Close()
 	}
 
-	// Tests.
-	request, _ := http.RequestFromString("GET /wiki/HTTP HTTP/1.0\nHost: ru.wikipedia.org\nLoh: Dimon")
-
-	for k, v := range request.Headers {
-		logger.LogD(k)
-		logger.LogD(v)
-	}
+	// Server.
 }
