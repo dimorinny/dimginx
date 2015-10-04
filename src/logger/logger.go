@@ -2,6 +2,7 @@ package logger
 
 import (
 	"fmt"
+	"io"
 	"log"
 	"time"
 )
@@ -15,8 +16,8 @@ const (
 
 var instance *log.Logger
 
-func Init(logger *log.Logger) {
-	instance = logger
+func Init(writer io.Writer) {
+	instance = log.New(writer, "", 0)
 }
 
 func LogD(v ...interface{}) {

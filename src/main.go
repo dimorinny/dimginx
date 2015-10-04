@@ -6,7 +6,6 @@ import (
 	"io"
 	"log"
 	"logger"
-	"os"
 )
 
 var (
@@ -29,31 +28,11 @@ func parseConfig() {
 
 // *** Logging *** //
 
-func createFileForAppend(fileName string) *os.File {
-	file, _ := os.OpenFile(fileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
-	return file
-}
-
-func createMultiWriter(writerStrings []string) io.Writer {
-	writers := []io.Writer{}
-
-	for _, v := range writerStrings {
-
-		if v == config.FileConfig {
-			logFile := createFileForAppend(logger.LogFileName)
-			closers = append(closers, logFile)
-			writers = append(writers, logFile)
-		} else if v == config.StdoutConfig {
-			writers = append(writers, os.Stdout)
-		}
-	}
-
-	return io.MultiWriter(writers...)
-}
-
 func initLogger() {
+	var writer io.Writer
 	if len(configuration.LoggerEngines) != 0 {
-		logger.Init(log.New(createMultiWriter(configuration.LoggerEngines), "", 0))
+		writer, closers = config.ParseLogEngines(configuration.LoggerEngines, logger.LogFileName)
+		logger.Init(writer)
 	}
 }
 
