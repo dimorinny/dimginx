@@ -7,9 +7,10 @@ import (
 )
 
 const (
-	debugPrefix = "Debug: "
-	errorPrefix = "Error: "
-	LogFileName = "server.log"
+	LogFileName    = "server.log"
+	debugPrefix    = "Debug: "
+	errorPrefix    = "Error: "
+	dateTimeFormat = "2006-01-02 15:04:05 "
 )
 
 var instance *log.Logger
@@ -31,5 +32,5 @@ func LogE(v ...interface{}) {
 }
 
 func currentTime() string {
-	return time.Now().Format("2006-01-02 15:04:05 ")
+	return time.Now().Format(dateTimeFormat)
 }

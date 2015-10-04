@@ -2,7 +2,7 @@ package main
 
 import (
 	"config"
-	"fmt"
+	"http"
 	"io"
 	"log"
 	"logger"
@@ -11,7 +11,7 @@ import (
 
 var (
 	configuration *config.Config
-	logFile       *os.File
+	closers       []io.Closer
 )
 
 // *** Configuration *** //
@@ -40,7 +40,8 @@ func createMultiWriter(writerStrings []string) io.Writer {
 	for _, v := range writerStrings {
 
 		if v == config.FileConfig {
-			logFile = createFileForAppend(logger.LogFileName)
+			logFile := createFileForAppend(logger.LogFileName)
+			closers = append(closers, logFile)
 			writers = append(writers, logFile)
 		} else if v == config.StdoutConfig {
 			writers = append(writers, os.Stdout)
@@ -51,7 +52,6 @@ func createMultiWriter(writerStrings []string) io.Writer {
 }
 
 func initLogger() {
-	fmt.Println(configuration.LoggerEngines)
 	if len(configuration.LoggerEngines) != 0 {
 		logger.Init(log.New(createMultiWriter(configuration.LoggerEngines), "", 0))
 	}
@@ -63,8 +63,15 @@ func init() {
 }
 
 func main() {
-	if logFile != nil {
-		defer logFile.Close()
+	for _, v := range closers {
+		defer v.Close()
 	}
 
+	// Tests.
+	request, _ := http.RequestFromString("GET /wiki/HTTP HTTP/1.0\nHost: ru.wikipedia.org\nLoh: Dimon")
+
+	for k, v := range request.Headers {
+		logger.LogD(k)
+		logger.LogD(v)
+	}
 }
