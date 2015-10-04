@@ -18,7 +18,7 @@ type Parser interface {
 
 type JsonConfigParser struct{}
 
-func (*JsonConfigParser) Parse() (*Config, error) {
+func (patser *JsonConfigParser) Parse() (*Config, error) {
 	str, err := ioutil.ReadFile(configPath)
 
 	if err != nil {
