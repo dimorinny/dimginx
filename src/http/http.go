@@ -22,9 +22,7 @@ func (r *Request) parseHeaders(headers []string) {
 	r.Headers = headersFromPlainData(headers)
 }
 
-func (r *Request) parseStartingLine(headers string) {
-
-}
+func (r *Request) parseStartingLine(headers string) {}
 
 func RequestFromString(req string) (*Request, error) {
 	request := new(Request)

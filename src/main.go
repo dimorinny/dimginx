@@ -15,7 +15,7 @@ var (
 
 // *** Configuration *** //
 
-func parseConfig() {
+func initConfig() {
 	parser := config.JsonConfigParser{}
 	conf, err := parser.Parse()
 
@@ -37,7 +37,7 @@ func initLogger() {
 }
 
 func init() {
-	parseConfig()
+	initConfig()
 	initLogger()
 }
 
