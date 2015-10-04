@@ -55,9 +55,6 @@ func initLogger() {
 	if len(configuration.LoggerEngines) != 0 {
 		logger.Init(log.New(createMultiWriter(configuration.LoggerEngines), "", 0))
 	}
-
-	logger.LogD("qweqweqweqe", "sdadasd")
-	logger.LogD("12312qweqweqweqe", "sdadasd")
 }
 
 func init() {
