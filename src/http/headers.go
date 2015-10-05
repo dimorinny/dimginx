@@ -18,7 +18,10 @@ func headersFromPlainData(data []string) Headers {
 
 	for _, v := range data {
 		headerData = strings.Split(v, headerSeparator)
-		headers[headerData[0]] = headerData[1]
+
+		if len(headerData) >= 2 {
+			headers[headerData[0]] = headerData[1]
+		}
 	}
 
 	return headers

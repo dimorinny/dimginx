@@ -3,9 +3,11 @@ package main
 import (
 	"config"
 	"fmt"
+	"http"
 	"io"
 	"log"
 	"logger"
+	"net"
 )
 
 var (
@@ -42,11 +44,35 @@ func init() {
 }
 
 func main() {
-	logger.LogI(fmt.Sprintf("Server started on %s:%d", configuration.Host, configuration.Port))
+	listenParams := fmt.Sprintf("%s:%d", configuration.Host, configuration.Port)
+	logger.LogI("Server started on " + listenParams)
 
 	for _, v := range closers {
 		defer v.Close()
 	}
 
-	// Server.
+	listener, err := net.Listen("tcp", listenParams)
+	if err != nil {
+		logger.LogE(err)
+	}
+
+	for {
+		conn, err := listener.Accept()
+
+		if err != nil {
+			logger.LogE(err)
+		}
+
+		go handleConnection(conn)
+	}
+}
+
+func handleConnection(c net.Conn) {
+	defer c.Close()
+
+	buffer := make([]byte, 1024)
+	c.Read(buffer)
+
+	request, _ := http.RequestFromString(string(buffer))
+	logger.LogD(request)
 }
