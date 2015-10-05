@@ -61,7 +61,6 @@ func main() {
 		defer v.Close()
 	}
 
-	runtime.GOMAXPROCS(runtime.NumCPU())
 	listener, err := net.Listen("tcp", listenParams)
 	if err != nil {
 		logger.LogE(err)
@@ -79,5 +78,6 @@ func main() {
 }
 
 func handleConnection(c net.Conn) {
+	logger.LogI("New connection from " + c.RemoteAddr().String())
 	defer c.Close()
 }
