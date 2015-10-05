@@ -2,8 +2,7 @@ package http
 
 import (
 	"errors"
-	// "fmt"
-	// "net/url"
+	"net/url"
 	"strings"
 )
 
@@ -33,7 +32,7 @@ func (r *Request) parseStartingLine(startingLine string) {
 
 	// TODO: parse query params
 	r.Proto = parts[2]
-	r.Path = uri[0]
+	r.Path = path
 	r.Method = parts[0]
 }
 
