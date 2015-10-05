@@ -6,8 +6,6 @@ import (
 	"strings"
 )
 
-var ()
-
 const (
 	stringSeparator  = "\r\n"
 	requestSeparator = "\r\n\r\n"

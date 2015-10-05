@@ -11,6 +11,7 @@ type Config struct {
 	Host          string   `json:host`
 	RootPath      string   `json:rootPath`
 	LoggerEngines []string `json:loggerEngines`
+	NumCpus       int      `json:numCpus`
 }
 
 // Constants for configuration logging.

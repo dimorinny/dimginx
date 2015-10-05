@@ -3,11 +3,12 @@ package main
 import (
 	"config"
 	"fmt"
-	"http"
+	// "http"
 	"io"
 	"log"
 	"logger"
 	"net"
+	"runtime"
 )
 
 var (
@@ -38,9 +39,18 @@ func initLogger() {
 	}
 }
 
+func initNumCpus() {
+	if configuration.NumCpus <= 0 {
+		runtime.GOMAXPROCS(configuration.NumCpus)
+	} else {
+		runtime.GOMAXPROCS(runtime.NumCPU())
+	}
+}
+
 func init() {
 	initConfig()
 	initLogger()
+	initNumCpus()
 }
 
 func main() {
@@ -51,6 +61,7 @@ func main() {
 		defer v.Close()
 	}
 
+	runtime.GOMAXPROCS(runtime.NumCPU())
 	listener, err := net.Listen("tcp", listenParams)
 	if err != nil {
 		logger.LogE(err)
@@ -69,10 +80,4 @@ func main() {
 
 func handleConnection(c net.Conn) {
 	defer c.Close()
-
-	buffer := make([]byte, 1024)
-	c.Read(buffer)
-
-	request, _ := http.RequestFromString(string(buffer))
-	logger.LogD(request)
 }
