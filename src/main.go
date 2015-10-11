@@ -40,7 +40,7 @@ func initLogger() {
 }
 
 func initNumCpus() {
-	if configuration.NumCpus <= 0 {
+	if configuration.NumCpus > 0 {
 		runtime.GOMAXPROCS(configuration.NumCpus)
 	} else {
 		runtime.GOMAXPROCS(runtime.NumCPU())
@@ -79,5 +79,6 @@ func main() {
 
 func handleConnection(c net.Conn) {
 	logger.LogI("New connection from " + c.RemoteAddr().String())
+
 	defer c.Close()
 }
