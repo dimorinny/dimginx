@@ -3,7 +3,7 @@ package main
 import (
 	"config"
 	"fmt"
-	// "http"
+	"http"
 	"io"
 	"log"
 	"logger"
@@ -77,8 +77,29 @@ func main() {
 	}
 }
 
+func readRequestData(c net.Conn) (*http.Request, error) {
+	buff := make([]byte, 1024)
+
+	_, readErr := c.Read(buff)
+
+	if readErr != nil {
+		return nil, readErr
+	}
+
+	return http.RequestFromString(string(buff))
+}
+
 func handleConnection(c net.Conn) {
 	logger.LogI("New connection from " + c.RemoteAddr().String())
-
 	defer c.Close()
+
+	request, err := readRequestData(c)
+
+	if err != nil {
+		logger.LogD("Error read data from socket")
+		return
+	}
+
+	response := http.InitResponse(request.Method, configuration.RootPath+request.Path)
+	c.Write(response.Bytes())
 }

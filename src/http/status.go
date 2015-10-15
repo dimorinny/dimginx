@@ -1,9 +1,10 @@
 package http
 
 const (
-	statusOk            = "200 OK"
-	statusNotFound      = "404 NOT FOUND"
-	statusBadRequest    = "400 BAD REQUEST"
-	statusForbidden     = "403 FORBIDDEN"
-	statusInternalError = "500 INTERNAL SERVER ERROR"
+	statusOk               = "200 OK"
+	statusNotFound         = "404 Not Found"
+	statusBadRequest       = "400 Bad Request"
+	statusForbidden        = "403 Forbidden"
+	statusInternalError    = "500 Internal Server Error"
+	statusMethodNotAllowed = "405 Method Not Allowed"
 )
