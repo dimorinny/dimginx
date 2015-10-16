@@ -1,6 +1,17 @@
 {
 	"port": 8080,
-	"host": "0.0.0.0",
-	"rootPath": "static",
-	"loggerEngines": ["STDOUT"]
+	"host": "0.0.0.0",	
+	"loggerEngines": ["STDOUT"],
+
+	"locations": [{
+			"rule": "\\.(html)$",
+			"root": "static"
+		}, {
+			"rule": "\\.(jpg|png)$",
+			"root": "images"
+		}, {
+			"rule": "/",
+			"root": "root"
+		}
+	]
 }

@@ -5,15 +5,16 @@ import (
 	"fmt"
 	"http"
 	"io"
-	"log"
+	"location"
 	"logger"
 	"net"
 	"runtime"
 )
 
 var (
-	configuration *config.Config
-	closers       []io.Closer
+	configuration   *config.Config
+	locationManager location.LocationManager
+	closers         []io.Closer
 )
 
 // *** Configuration *** //
@@ -25,8 +26,24 @@ func initConfig() {
 	configuration = conf
 
 	if err != nil {
-		log.Fatal(err)
+		logger.LogE(err)
 	}
+}
+
+// *** Locations *** //
+
+func initLocations() {
+	var bufferLocations []*location.Location
+
+	for _, v := range configuration.Locations {
+		bufferLocation, err := location.InitLocation(v.Rule, v.Root)
+		if err != nil {
+			logger.LogE(err)
+		}
+		bufferLocations = append(bufferLocations, bufferLocation)
+	}
+
+	locationManager = location.InitLocationManager(bufferLocations)
 }
 
 // *** Logging *** //
@@ -34,7 +51,8 @@ func initConfig() {
 func initLogger() {
 	var writer io.Writer
 	if len(configuration.LoggerEngines) != 0 {
-		writer, closers = config.ParseLogEngines(configuration.LoggerEngines, logger.LogFileName)
+		writer, closers = config.ParseLogEngines(configuration.LoggerEngines,
+			logger.LogFileName)
 		logger.Init(writer)
 	}
 }
@@ -50,6 +68,7 @@ func initNumCpus() {
 func init() {
 	initConfig()
 	initLogger()
+	initLocations()
 	initNumCpus()
 }
 
@@ -89,6 +108,17 @@ func readRequestData(c net.Conn) (*http.Request, error) {
 	return http.RequestFromString(string(buff))
 }
 
+func generateResponse(method string, path string) http.Response {
+	prefix, err := locationManager.Match(path)
+
+	if err != nil {
+		// TODO: maybe another error
+		return http.InitResponseForError(http.StatusNotFound)
+	}
+
+	return http.InitResponse(method, prefix.Root+path)
+}
+
 func handleConnection(c net.Conn) {
 	logger.LogI("New connection from " + c.RemoteAddr().String())
 	defer c.Close()
@@ -100,6 +130,6 @@ func handleConnection(c net.Conn) {
 		return
 	}
 
-	response := http.InitResponse(request.Method, configuration.RootPath+request.Path)
+	response := generateResponse(request.Method, request.Path)
 	c.Write(response.Bytes())
 }

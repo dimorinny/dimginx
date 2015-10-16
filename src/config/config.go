@@ -7,11 +7,16 @@ import (
 
 // Config model.
 type Config struct {
-	Port          int      `json:port`
-	Host          string   `json:host`
-	RootPath      string   `json:rootPath`
-	LoggerEngines []string `json:loggerEngines`
-	NumCpus       int      `json:numCpus`
+	Port          int              `json:port`
+	Host          string           `json:host`
+	LoggerEngines []string         `json:loggerEngines`
+	NumCpus       int              `json:numCpus`
+	Locations     []LocationConifg `json:locations`
+}
+
+type LocationConifg struct {
+	Rule string `json:rule`
+	Root string `json:root`
 }
 
 // Constants for configuration logging.

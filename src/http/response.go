@@ -33,12 +33,12 @@ func (r Response) Bytes() []byte {
 
 func checkMethodErrors(response *Response, method string) bool {
 	if !isCorrectMethod(method) {
-		response.Status = statusInternalError
+		response.Status = StatusInternalError
 		return true
 	}
 
 	if !isSupportedMethod(method) {
-		response.Status = statusMethodNotAllowed
+		response.Status = StatusMethodNotAllowed
 		return true
 	}
 
@@ -64,7 +64,7 @@ func InitResponse(method string, path string) Response {
 
 	// TODO: Not only not found
 	if err != nil {
-		response.Status = statusNotFound
+		response.Status = StatusNotFound
 		return response
 	}
 
@@ -72,9 +72,18 @@ func InitResponse(method string, path string) Response {
 		response.Body = string(data)
 	}
 
-	response.Status = statusOk
+	response.Status = StatusOk
 	response.Headers.Add("Content-type", getContentTypeByFilename(path))
 	response.Headers.Add("Content-length", strconv.Itoa(len(data)))
 
+	return response
+}
+
+func InitResponseForError(status string) Response {
+	response := Response{}
+	response.Headers = Headers{}
+	response.addDefaultHeaders()
+	response.Proto = httpProto
+	response.Status = status
 	return response
 }
