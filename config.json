@@ -5,13 +5,13 @@
 
 	"locations": [{
 			"rule": "\\.(html)$",
-			"root": "static"
+			"root": "static/html"
 		}, {
 			"rule": "\\.(jpg|png)$",
-			"root": "images"
+			"root": "static/images"
 		}, {
 			"rule": "/",
-			"root": "root"
+			"root": "static"
 		}
 	]
 }
