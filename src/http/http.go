@@ -15,7 +15,7 @@ const (
 )
 
 var (
-	supportedMethods = []string{"GET", "POST"}
+	supportedMethods = []string{"GET", "HEAD"}
 	httpMethods      = []string{"OPTIONS", "GET", "HEAD", "POST", "PUT", "PATCH",
 		"DELETE", "TRACE", "CONNECT"}
 )
