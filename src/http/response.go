@@ -45,14 +45,22 @@ func checkMethodErrors(response *Response, method string) bool {
 	return false
 }
 
-// TODO: rename it
+func checkPathErrors(response *Response, path string) bool {
+	if !isSecurePath(path) {
+		response.Status = StatusForbidden
+		return true
+	}
+
+	return false
+}
+
 func InitResponse(method string, path string) Response {
 	response := Response{}
 	response.Headers = Headers{}
 	response.addDefaultHeaders()
 	response.Proto = httpProto
 
-	if checkMethodErrors(&response, method) {
+	if checkMethodErrors(&response, method) || checkPathErrors(&response, path) {
 		return response
 	}
 

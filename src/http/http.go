@@ -61,3 +61,7 @@ func isSupportedMethod(method string) bool {
 
 	return false
 }
+
+func isSecurePath(path string) bool {
+	return !strings.Contains(path, "../")
+}
