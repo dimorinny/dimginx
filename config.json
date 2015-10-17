@@ -4,12 +4,6 @@
 	"loggerEngines": ["STDOUT"],
 
 	"locations": [{
-			"rule": "\\.(html)$",
-			"root": "static/html"
-		}, {
-			"rule": "\\.(jpg|png)$",
-			"root": "static/images"
-		}, {
 			"rule": "/",
 			"root": "static"
 		}

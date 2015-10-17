@@ -10,7 +10,6 @@ type Config struct {
 	Port          int              `json:port`
 	Host          string           `json:host`
 	LoggerEngines []string         `json:loggerEngines`
-	NumCpus       int              `json:numCpus`
 	Locations     []LocationConifg `json:locations`
 }
 

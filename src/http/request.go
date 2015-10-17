@@ -19,7 +19,6 @@ func (r *Request) parseHeaders(headers []string) {
 }
 
 func (r *Request) parseStartingLine(startingLine string) {
-	// TODO: spaces in filename
 	parts := strings.Split(startingLine, " ")
 	uri := strings.Split(parts[1], "?")
 	path, _ := url.QueryUnescape(uri[0])

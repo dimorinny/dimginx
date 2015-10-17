@@ -56,7 +56,9 @@ func InitResponse(method string, path string) Response {
 		return response
 	}
 
-	if isDirectory(path) {
+	isDirectoryFlag := isDirectory(path)
+
+	if isDirectoryFlag {
 		path += defaultFile
 	}
 
@@ -64,7 +66,11 @@ func InitResponse(method string, path string) Response {
 
 	// TODO: Not only not found
 	if err != nil {
-		response.Status = StatusNotFound
+		if isDirectoryFlag {
+			response.Status = StatusForbidden
+		} else {
+			response.Status = StatusNotFound
+		}
 		return response
 	}
 
@@ -73,8 +79,8 @@ func InitResponse(method string, path string) Response {
 	}
 
 	response.Status = StatusOk
-	response.Headers.Add("Content-type", getContentTypeByFilename(path))
-	response.Headers.Add("Content-length", strconv.Itoa(len(data)))
+	response.Headers.Add("Content-Type", getContentTypeByFilename(path))
+	response.Headers.Add("Content-Length", strconv.Itoa(len(data)))
 
 	return response
 }

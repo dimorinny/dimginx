@@ -2,6 +2,7 @@ package main
 
 import (
 	"config"
+	"flag"
 	"fmt"
 	"http"
 	"io"
@@ -12,10 +13,18 @@ import (
 )
 
 var (
+	ncpu            int
 	configuration   *config.Config
 	locationManager location.LocationManager
 	closers         []io.Closer
 )
+
+// *** Args *** //
+
+func initCommandLineArgs() {
+	flag.IntVar(&ncpu, "c", runtime.NumCPU(), "The number of cpu")
+	flag.Parse()
+}
 
 // *** Configuration *** //
 
@@ -58,14 +67,11 @@ func initLogger() {
 }
 
 func initNumCpus() {
-	if configuration.NumCpus > 0 {
-		runtime.GOMAXPROCS(configuration.NumCpus)
-	} else {
-		runtime.GOMAXPROCS(runtime.NumCPU())
-	}
+	runtime.GOMAXPROCS(ncpu)
 }
 
 func init() {
+	initCommandLineArgs()
 	initConfig()
 	initLogger()
 	initLocations()
