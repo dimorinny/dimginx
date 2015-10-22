@@ -2,7 +2,6 @@ package http
 
 import (
 	"bytes"
-	"fmt"
 	"io/ioutil"
 	"os"
 	"strconv"
@@ -93,7 +92,6 @@ func InitResponse(method string, path string) Response {
 	// TODO: Not only not found
 	if err != nil {
 		response.Status = responseStatusByError(err, isDirectoryFlag)
-		fmt.Println(response.Status)
 		return response
 	}
 
