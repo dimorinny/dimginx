@@ -132,7 +132,6 @@ func handleConnection(c net.Conn) {
 	request, err := readRequestData(c)
 
 	if err != nil {
-		logger.LogD("Error read data from socket")
 		return
 	}
 

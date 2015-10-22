@@ -2,7 +2,9 @@ package http
 
 import (
 	"bytes"
+	"fmt"
 	"io/ioutil"
+	"os"
 	"strconv"
 	"time"
 )
@@ -54,6 +56,22 @@ func checkPathErrors(response *Response, path string) bool {
 	return false
 }
 
+func responseStatusByError(err error, isDirectory bool) string {
+	var responseStatus string
+
+	if os.IsNotExist(err) {
+		if isDirectory {
+			responseStatus = StatusForbidden
+		} else {
+			responseStatus = StatusNotFound
+		}
+	} else if os.IsPermission(err) {
+		responseStatus = StatusForbidden
+	}
+
+	return responseStatus
+}
+
 func InitResponse(method string, path string) Response {
 	response := Response{}
 	response.Headers = Headers{}
@@ -74,11 +92,8 @@ func InitResponse(method string, path string) Response {
 
 	// TODO: Not only not found
 	if err != nil {
-		if isDirectoryFlag {
-			response.Status = StatusForbidden
-		} else {
-			response.Status = StatusNotFound
-		}
+		response.Status = responseStatusByError(err, isDirectoryFlag)
+		fmt.Println(response.Status)
 		return response
 	}
 
