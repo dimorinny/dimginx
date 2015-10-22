@@ -1,5 +1,5 @@
 # Веб сервер для отдачи статики
-<img src="https://i.imgur.com/qOrLzN9.png">
+<img src="https://i.imgur.com/GipHZGX.png">
 
 ### Документация
 
