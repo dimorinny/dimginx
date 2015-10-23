@@ -7,7 +7,6 @@ import (
 const (
 	stringSeparator  = "\r\n"
 	requestSeparator = "\r\n\r\n"
-	dateTimeFormat   = "Mon, _2 Jan 2006 15:04:05 GMT"
 	serverName       = "DimGINX"
 	defaultFile      = "/index.html"
 	notFoundFile     = "/404.html"

@@ -118,7 +118,6 @@ func generateResponse(method string, path string) http.Response {
 	prefix, err := locationManager.Match(path)
 
 	if err != nil {
-		// TODO: maybe another error
 		return http.InitResponseForError(http.StatusNotFound)
 	}
 

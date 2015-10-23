@@ -18,7 +18,7 @@ type Response struct {
 // Headers must be inited
 func (r *Response) addDefaultHeaders() {
 	r.Headers.Add("Server", serverName)
-	r.Headers.Add("Date", time.Now().Format(dateTimeFormat))
+	r.Headers.Add("Date", time.Now().Format(time.RFC1123))
 	r.Headers.Add("Connection", "close")
 }
 
@@ -89,7 +89,6 @@ func InitResponse(method string, path string) Response {
 
 	data, err := ioutil.ReadFile(path)
 
-	// TODO: Not only not found
 	if err != nil {
 		response.Status = responseStatusByError(err, isDirectoryFlag)
 		return response
